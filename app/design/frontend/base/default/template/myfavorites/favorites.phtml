@@ -1,0 +1,40 @@
+<br />
+<div class="page-title">
+    <h1><?php echo $this->__('My favorites'); ?></h1>
+</div>
+<?php
+$favs = array(); 
+foreach($this->getFavorites() as $sku=>$qty) {
+    if($qty<2) continue;
+    $_prod = Mage::getModel('catalog/product')->loadByAttribute('sku',$sku);
+    if(!$_prod) continue; 
+    $_prod->setQtyOrdered($qty);
+    $favs[] = $_prod;
+} ?>
+<?php if(count($favs)>0) { ?>
+<table class="data-table">
+    <thead>
+        <tr class="first last">
+            <th><?php echo $this->__('Qty'); ?></th>
+            <th><?php echo $this->__('Name'); ?></th>
+            <th><?php echo $this->__('SKU'); ?></th>
+            <th><?php echo $this->__('Price'); ?></th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach($favs as $i=>$_prod): ?>
+        <tr class="<?php echo ($i % 2) ? 'even' : 'odd'; ?><?php if($i==0) { echo ' first'; } elseif($i==count($favs)-1) { echo ' last'; } ?>">
+            <td><?php echo $_prod->getQtyOrdered(); ?></td>
+            <td><a href="<?php echo $_prod->getProductUrl(); ?>"><?php echo $_prod->getName(); ?></a></td>
+            <td><?php echo $_prod->getSku(); ?></td>
+            <td><?php echo Mage::helper('core')->currency($_prod->getPrice(), true, false); ?></td>
+            <td><a href="<?php echo Mage::getUrl('checkout/cart/add', array('product' => $_prod->getId())); ?>"><?php echo $this->__('Order now'); ?></a></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php } else { ?>
+    <?php echo $this->__('No products have been ordered more than once yet.'); ?>
+<?php } ?>

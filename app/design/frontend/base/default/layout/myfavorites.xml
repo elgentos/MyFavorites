@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <customer_account_index>
+        <reference name="my.account.wrapper">
+                <block type="myfavorites/customer_account_favorites" name="myfavorites_customer_account_favorites" as="favorites" template="myfavorites/favorites.phtml"/>
+        </reference>
+    </customer_account_index>
+</layout>
